@@ -26,10 +26,10 @@ export const getInvoices = asyncHandler(async (req, res) => {
 
   const total    = await Invoice.countDocuments(query);
   const invoices = await Invoice.find(query)
-    .sort({ createdAt: -1 })
+    .sort({ isPinned: -1, createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit))
-    .select("invoiceNumber date to.name total isProforma createdAt");
+    .select("invoiceNumber date to.name from.name total isProforma isPinned createdAt");
 
   res.json({
     success: true,
@@ -92,6 +92,15 @@ export const updateInvoice = asyncHandler(async (req, res) => {
   );
 
   res.json({ success: true, message: "Invoice updated.", invoice: updated });
+});
+
+/* ── PATCH /api/invoices/:id/pin ── */
+export const togglePin = asyncHandler(async (req, res) => {
+  const invoice = await Invoice.findOne({ _id: req.params.id, user: req.user._id });
+  if (!invoice) { res.status(404); throw new Error("Invoice not found."); }
+  invoice.isPinned = !invoice.isPinned;
+  await invoice.save();
+  res.json({ success: true, isPinned: invoice.isPinned });
 });
 
 /* ── DELETE /api/invoices/:id ── */

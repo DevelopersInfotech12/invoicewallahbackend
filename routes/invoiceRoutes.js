@@ -5,6 +5,7 @@ import {
   createInvoice,
   updateInvoice,
   deleteInvoice,
+  togglePin,
 }                        from "../controllers/invoiceController.js";
 import { protect }       from "../middleware/authMiddleware.js";
 import { apiLimiter }    from "../middleware/rateLimiter.js";
@@ -18,6 +19,8 @@ router.use(apiLimiter);
 router.route("/")
   .get(getInvoices)
   .post(createInvoice);
+
+router.patch("/:id/pin", togglePin);
 
 router.route("/:id")
   .get(getInvoice)

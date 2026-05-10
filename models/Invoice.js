@@ -51,9 +51,10 @@ const invoiceSchema = new mongoose.Schema(
     taxType: { type: String, enum: ["cgst_sgst", "igst"], default: "cgst_sgst" },
     notes:   { type: String, default: "" },
     bank:    bankSchema,
-    subtotal:{ type: Number, default: 0 },
-    taxAmt:  { type: Number, default: 0 },
-    total:   { type: Number, default: 0 },
+    subtotal:  { type: Number, default: 0 },
+    taxAmt:    { type: Number, default: 0 },
+    total:     { type: Number, default: 0 },
+    isPinned:  { type: Boolean, default: false },
   },
   { timestamps: true }
 );
