@@ -7,6 +7,7 @@ import { connectDB }  from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import authRoutes     from "./routes/authRoutes.js";
 import invoiceRoutes  from "./routes/invoiceRoutes.js";
+import shareRoutes    from "./routes/shareRoutes.js";
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -15,14 +16,16 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 /* ── Global Middleware ── */
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // allow PDF served to WhatsApp/external
+}));
 app.use(cors({
   origin:      process.env.FRONTEND_URL || "http://localhost:3000",
   credentials: true,
 }));
 app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
-app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));         // increased for any base64 payloads
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 /* ── Health Check ── */
 app.get("/api/health", (_req, res) => {
@@ -32,6 +35,7 @@ app.get("/api/health", (_req, res) => {
 /* ── Routes ── */
 app.use("/api/auth",    authRoutes);
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api/share",    shareRoutes);
 
 /* ── Error Handling ── */
 app.use(notFound);

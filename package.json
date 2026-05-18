@@ -1,7 +1,7 @@
 {
   "name": "invoice-generator-backend",
   "version": "1.0.0",
-  "description": "Invoice Generator REST API — Express + MongoDB",
+  "description": "Invoice Generator REST API \u2014 Express + MongoDB",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
     "morgan": "^1.10.0",
-    "validator": "^13.12.0"
+    "validator": "^13.12.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
